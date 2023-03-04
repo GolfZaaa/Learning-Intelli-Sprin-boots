@@ -2,29 +2,34 @@ package monsterservice.service;
 
 
 import monsterservice.model.Monster;
+import monsterservice.repository.MonsterRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
 public class MonsterService {
 
+    @Autowired
+    private MonsterRepository monsterRepository;
+
     public Monster postCreateMonsterService(Monster monster){
-        return monster;
+
+        return monsterRepository.save(monster);
     }
 
     public List<Monster> getAllMonsterService(){
-        Monster monster = new Monster();
-        monster.setId(12);
-        return Collections.singletonList(monster);
+        return monsterRepository.findAll();
     }
 
-    public Monster getInformation (Integer id){
-        Monster monster = new Monster();
-        monster.setId(id);
-        return monster;
+    public Optional<Monster> getInformation (Integer id){
+
+        //Select * from monster where id = id;
+        return monsterRepository.findById(id);
+
     }
     public Monster getUpdateMonsterIdService(Monster monster){
         return monster;

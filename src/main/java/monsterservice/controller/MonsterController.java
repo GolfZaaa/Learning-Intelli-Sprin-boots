@@ -5,8 +5,8 @@ import monsterservice.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("monster")
@@ -32,9 +32,8 @@ public class MonsterController {
     }
 
     @GetMapping("/get-information")
-    public Monster getInformation(@RequestHeader Integer id){
-        Monster Information = monsterService.getInformation(id);
-        return Information;
+    public Optional<Monster> getInformation(@RequestHeader Integer id){
+        return monsterService.getInformation(id);
     }
 
     @PutMapping("/update")

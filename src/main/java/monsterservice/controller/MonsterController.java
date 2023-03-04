@@ -1,8 +1,11 @@
 package monsterservice.controller;
 
+import monsterservice.handleExceptionError.HandleExceptionError;
 import monsterservice.model.Monster;
 import monsterservice.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,39 +19,57 @@ public class MonsterController {
     private MonsterService monsterService;
 
     @GetMapping("/greeting")
-    public String getGreeting(){
+    public String getGreeting() {
         return "Hi there ! DKub 9อวิรุทธ์ ไชยสงคราม";
     }
 
     @PostMapping("/create")
-    public Monster postCreate(@RequestBody Monster monster){
+    public Monster postCreate(@RequestBody Monster monster) {
         Monster response = monsterService.postCreateMonsterService(monster);
         return response;
     }
 
     @GetMapping("/get-all")
-    public List<Monster> getAll(){
+    public List<Monster> getAll() {
         return monsterService.getAllMonsterService();
     }
 
     @GetMapping("/get-information")
-    public Optional<Monster> getInformation(@RequestHeader Integer id){
+    public Optional<Monster> getInformation(@RequestHeader Integer id) {
         return monsterService.getInformation(id);
     }
 
     @PutMapping("/update")
-    public Monster putUpdate(@RequestBody Monster monster){
-    return monsterService.getUpdateMonsterIdService(monster);
+    public ResponseEntity<Monster> putUpdate(@RequestBody Monster monster) {
+        try {
+            return new ResponseEntity<>(monsterService.getUpdateMonsterIdService(monster), HttpStatus.OK);
+        } catch (HandleExceptionError ex) {
+            return new ResponseEntity<>(new Monster(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete")
-    public  boolean delete(@RequestHeader Integer id){
-        return monsterService.deleteMonsterService(id);
+    public ResponseEntity<Boolean> delete(@RequestHeader Integer id) {
+        try {
+            return new ResponseEntity<>(
+                    monsterService.deleteMonsterService(id),
+                    HttpStatus.OK);
+        } catch (HandleExceptionError ex) {
+            return new ResponseEntity<>(
+                    false,
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/attack")
-    public Monster putAttack(@RequestHeader Integer id,@RequestHeader Integer health ){
-        Monster attack = monsterService.attackMonsterService(id, health);
-        return attack;
+    public ResponseEntity<String> putAttack(@RequestHeader Integer id, @RequestHeader Integer damage) {
+        try {
+            return new ResponseEntity<>(
+                    monsterService.attackMonsterService(id, damage),
+                    HttpStatus.OK);
+        } catch (HandleExceptionError ex) {
+            return new ResponseEntity<>(ex.getMessage(),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 }

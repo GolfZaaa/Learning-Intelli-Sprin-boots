@@ -154,13 +154,13 @@ public class MonsterControllerTest {
 
     @Test
     void attactTestFailCanNotUpdate() throws HandleExceptionError{
-        doThrow(new HandleExceptionError("Can't update")).when(monsterService).attackMonsterService(any(Integer.class),any(Integer.class));
+        doThrow(new HandleExceptionError("Cant update")).when(monsterService).attackMonsterService(any(Integer.class),any(Integer.class));
 
         ResponseEntity<String> response = monsterController.putAttack(11,1100);
 
         assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
 
-        assertEquals("Can't update",response.getBody());
+        assertEquals("Cant update",response.getBody());
     }
 
     @Test

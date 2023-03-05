@@ -35,14 +35,23 @@ public class MonsterService {
         return monsterRepository.findById(id);
     }
 
-    public Monster getUpdateMonsterIdService(Monster monster) throws HandleExceptionError {
+
+    public Monster getUpdateMonsterIdService(
+            Monster monster)
+            throws HandleExceptionError {
         try {
             Optional<Monster> data = getInformation(monster.getId());
             if (data.isPresent()) {
                 return monsterRepository.save(monster);
-            } else throw new HandleExceptionError("data not found");
-        } catch (HandleExceptionError ex) {
-            throw new HandleExceptionError("Can't connect database !!");
+            } else {
+                throw new HandleExceptionError(
+                        "Data not found");
+            }
+        } catch (RuntimeException ex) {
+            throw new HandleExceptionError("Can't connect database");
+        } catch (Exception ex) {
+            throw new HandleExceptionError(
+                    ex.getMessage());
         }
     }
 
